@@ -6,15 +6,15 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 __version__ = "0.0.0"
 
-REPO_NAME = "Kidney-Disease-Classification-Deep-Learning-Project"
-AUTHOR_USER_NAME = "krishnaik06"
+REPO_NAME = "Kidney-Disease-Classification-MLOps"
+AUTHOR_USER_NAME = "Karthik016996148"
 SRC_REPO = "cnnClassifier"
-AUTHOR_EMAIL = "entbappy73@gmail.com"
+AUTHOR_EMAIL = "karthik@example.com"
 
 
 setuptools.setup(
     name=SRC_REPO,
-    version=__version__,
+    version="0.1.0",
     author=AUTHOR_USER_NAME,
     author_email=AUTHOR_EMAIL,
     description="A small python package for CNN app",

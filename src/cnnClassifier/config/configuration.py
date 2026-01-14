@@ -83,10 +83,14 @@ class ConfigurationManager:
 
 
     def get_evaluation_config(self) -> EvaluationConfig:
+        # Prefer environment variables for MLflow so we never hardcode tokens/URLs in the repo.
+        # Default to a local file-store that works out-of-the-box.
+        mlflow_tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "file:./mlruns")
+
         eval_config = EvaluationConfig(
             path_of_model="artifacts/training/model.h5",
             training_data="artifacts/data_ingestion/kidney-ct-scan-image",
-            mlflow_uri="https://dagshub.com/entbappy/Kidney-Disease-Classification-MLflow-DVC.mlflow",
+            mlflow_uri=mlflow_tracking_uri,
             all_params=self.params,
             params_image_size=self.params.IMAGE_SIZE,
             params_batch_size=self.params.BATCH_SIZE

@@ -54,7 +54,9 @@ class Evaluation:
 
     
     def log_into_mlflow(self):
-        mlflow.set_registry_uri(self.config.mlflow_uri)
+        # Use tracking URI (not registry URI) for experiment logging.
+        # Default is file-store (see ConfigurationManager), but can be overridden via env var.
+        mlflow.set_tracking_uri(self.config.mlflow_uri)
         tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
         
         with mlflow.start_run():
@@ -69,6 +71,7 @@ class Evaluation:
                 # There are other ways to use the Model Registry, which depends on the use case,
                 # please refer to the doc for more information:
                 # https://mlflow.org/docs/latest/model-registry.html#api-workflow
+                # If a model registry is available (e.g., MLflow server), register the model.
                 mlflow.keras.log_model(self.model, "model", registered_model_name="VGG16Model")
             else:
                 mlflow.keras.log_model(self.model, "model")

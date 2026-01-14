@@ -1,6 +1,7 @@
 from cnnClassifier.config.configuration import ConfigurationManager
 from cnnClassifier.components.model_evaluation_mlflow import Evaluation
 from cnnClassifier import logger
+import os
 
 
 
@@ -16,8 +17,10 @@ class EvaluationPipeline:
         eval_config = config.get_evaluation_config()
         evaluation = Evaluation(eval_config)
         evaluation.evaluation()
-        evaluation.save_score()
-        # evaluation.log_into_mlflow()
+
+        # By default we log to local file-store (`./mlruns`). You can disable if needed.
+        if os.getenv("ENABLE_MLFLOW_LOGGING", "true").lower() in {"1", "true", "yes", "y"}:
+            evaluation.log_into_mlflow()
 
 
 
