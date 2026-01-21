@@ -1,10 +1,14 @@
 schema: '2.0'
 stages:
   prepare_data:
-    cmd: python scripts/prepare_data.py --out-dir data/processed --image-size 
-      224 --train-per-class 32 --test-per-class 16 --seed 42
+    cmd: python scripts/prepare_data.py --params params.yaml --out-dir 
+      data/processed
     params:
       params.yaml:
+        data.raw_dir: data/raw
+        data.source: synthetic
+        data.test_ratio: 0.2
+        data.train_ratio: 0.8
         prepare_data.image_size: 224
         prepare_data.seed: 42
         prepare_data.test_per_class: 16
@@ -27,8 +31,8 @@ stages:
       nfiles: 64
     - path: params.yaml
       hash: md5
-      md5: 637249490f9ee912199da4860ae4de9f
-      size: 224
+      md5: 5f84d57b9d8104778ca924a13eb4e261
+      size: 492
     - path: scripts/train.py
       hash: md5
       md5: 8ae06d102583863b5e2246cec55f6dd8
@@ -82,8 +86,8 @@ stages:
       size: 44780939
     - path: params.yaml
       hash: md5
-      md5: 637249490f9ee912199da4860ae4de9f
-      size: 224
+      md5: 5f84d57b9d8104778ca924a13eb4e261
+      size: 492
     - path: scripts/evaluate.py
       hash: md5
       md5: 06096bf82ef13262b3cd2528236ccc0c
@@ -108,5 +112,5 @@ stages:
     outs:
     - path: metrics/eval.json
       hash: md5
-      md5: a987cdb0740dbdb7f61ff94f046bad84
+      md5: cca4a5cb5a1cc534fb11c5661911e67b
       size: 60

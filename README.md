@@ -33,7 +33,9 @@ dvc repro
 - **Option B**: run the python pipeline script directly
 
 ```bash
-python main.py
+python scripts/prepare_data.py
+python scripts/train.py
+python scripts/evaluate.py
 ```
 
 ### Track experiments with MLflow
@@ -65,3 +67,21 @@ set ENABLE_MLFLOW_LOGGING=false
 dvc config --local cache.dir C:\dvc-cache
 ```
 
+## Using your own local dataset
+
+1. Put images here (ImageFolder layout):
+
+```
+data/raw/<class_name>/*.jpg
+data/raw/<class_name>/*.png
+```
+
+2. Edit `params.yaml`:
+- set `data.source: local`
+- set `data.raw_dir: data/raw` (or your custom path)
+
+3. Run:
+
+```bash
+dvc repro
+```

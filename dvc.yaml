@@ -1,7 +1,11 @@
 stages:
   prepare_data:
-    cmd: python scripts/prepare_data.py --out-dir data/processed --image-size ${prepare_data.image_size} --train-per-class ${prepare_data.train_per_class} --test-per-class ${prepare_data.test_per_class} --seed ${prepare_data.seed}
+    cmd: python scripts/prepare_data.py --params params.yaml --out-dir data/processed
     params:
+      - data.source
+      - data.raw_dir
+      - data.train_ratio
+      - data.test_ratio
       - prepare_data.image_size
       - prepare_data.train_per_class
       - prepare_data.test_per_class

@@ -1,5 +1,11 @@
 data:
   num_classes: 2
+  # "synthetic" (default) generates fake images so the repo works without a dataset.
+  # "local" uses images from data.raw_dir with ImageFolder layout: data/raw/<class>/*.{jpg,png,...}
+  source: synthetic
+  raw_dir: data/raw
+  train_ratio: 0.8
+  test_ratio: 0.2
 
 prepare_data:
   image_size: 224
