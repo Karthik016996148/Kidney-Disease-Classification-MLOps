@@ -1,0 +1,51 @@
+stages:
+  prepare_data:
+    cmd: python scripts/prepare_data.py --out-dir data/processed --image-size ${prepare_data.image_size} --train-per-class ${prepare_data.train_per_class} --test-per-class ${prepare_data.test_per_class} --seed ${prepare_data.seed}
+    params:
+      - prepare_data.image_size
+      - prepare_data.train_per_class
+      - prepare_data.test_per_class
+      - prepare_data.seed
+    outs:
+      - data/processed
+
+  train:
+    cmd: python scripts/train.py --params params.yaml --train-dir data/processed/train --model-out models/model.pt --metrics-out metrics/train.json --classmap-out models/classmap.json
+    deps:
+      - scripts/train.py
+      - src/kidney_classifier/train.py
+      - src/kidney_classifier/model.py
+      - src/kidney_classifier/data.py
+      - data/processed/train
+      - params.yaml
+    params:
+      - train.image_size
+      - train.batch_size
+      - train.epochs
+      - train.lr
+      - train.pretrained
+      - train.seed
+    outs:
+      - models/model.pt
+      - models/classmap.json
+    metrics:
+      - metrics/train.json:
+          cache: false
+
+  evaluate:
+    cmd: python scripts/evaluate.py --params params.yaml --test-dir data/processed/test --model-path models/model.pt --metrics-out metrics/eval.json
+    deps:
+      - scripts/evaluate.py
+      - src/kidney_classifier/eval.py
+      - src/kidney_classifier/model.py
+      - src/kidney_classifier/data.py
+      - data/processed/test
+      - models/model.pt
+      - params.yaml
+    params:
+      - train.image_size
+      - train.batch_size
+      - data.num_classes
+    metrics:
+      - metrics/eval.json:
+          cache: false

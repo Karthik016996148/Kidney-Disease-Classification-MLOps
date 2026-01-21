@@ -1,0 +1,16 @@
+data:
+  num_classes: 2
+
+prepare_data:
+  image_size: 224
+  train_per_class: 32
+  test_per_class: 16
+  seed: 42
+
+train:
+  image_size: 224
+  batch_size: 16
+  epochs: 1
+  lr: 0.0003
+  pretrained: true
+  seed: 42

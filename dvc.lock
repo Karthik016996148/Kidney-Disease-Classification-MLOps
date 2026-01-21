@@ -1,0 +1,112 @@
+schema: '2.0'
+stages:
+  prepare_data:
+    cmd: python scripts/prepare_data.py --out-dir data/processed --image-size 
+      224 --train-per-class 32 --test-per-class 16 --seed 42
+    params:
+      params.yaml:
+        prepare_data.image_size: 224
+        prepare_data.seed: 42
+        prepare_data.test_per_class: 16
+        prepare_data.train_per_class: 32
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: dbbe3e920458a3ed22e4e4adb2ed48bf.dir
+      size: 13242194
+      nfiles: 96
+  train:
+    cmd: python scripts/train.py --params params.yaml --train-dir 
+      data/processed/train --model-out models/model.pt --metrics-out 
+      metrics/train.json --classmap-out models/classmap.json
+    deps:
+    - path: data/processed/train
+      hash: md5
+      md5: 3c7c5816dd7fdd684218223b8a7eb83c.dir
+      size: 8845840
+      nfiles: 64
+    - path: params.yaml
+      hash: md5
+      md5: 637249490f9ee912199da4860ae4de9f
+      size: 224
+    - path: scripts/train.py
+      hash: md5
+      md5: 8ae06d102583863b5e2246cec55f6dd8
+      size: 1127
+    - path: src/kidney_classifier/data.py
+      hash: md5
+      md5: ed394dbe7f2583a5c344979a9441f73a
+      size: 1134
+    - path: src/kidney_classifier/model.py
+      hash: md5
+      md5: c250026896e40a97b8e5477c409994ae
+      size: 781
+    - path: src/kidney_classifier/train.py
+      hash: md5
+      md5: b457dbd2513ef0ba564f0be27e9ea82c
+      size: 3251
+    params:
+      params.yaml:
+        train.batch_size: 16
+        train.epochs: 1
+        train.image_size: 224
+        train.lr: 0.0003
+        train.pretrained: true
+        train.seed: 42
+    outs:
+    - path: metrics/train.json
+      hash: md5
+      md5: db4e30375901764f59ceefee84b6dd60
+      size: 67
+    - path: models/classmap.json
+      hash: md5
+      md5: a972faeeaffbbc960a584e60a17d9dfb
+      size: 166
+    - path: models/model.pt
+      hash: md5
+      md5: 608a325e5094d355822a4542a94631ce
+      size: 44780939
+  evaluate:
+    cmd: python scripts/evaluate.py --params params.yaml --test-dir 
+      data/processed/test --model-path models/model.pt --metrics-out 
+      metrics/eval.json
+    deps:
+    - path: data/processed/test
+      hash: md5
+      md5: 6365de3d895527e913a5899f1cba980b.dir
+      size: 4396354
+      nfiles: 32
+    - path: models/model.pt
+      hash: md5
+      md5: 608a325e5094d355822a4542a94631ce
+      size: 44780939
+    - path: params.yaml
+      hash: md5
+      md5: 637249490f9ee912199da4860ae4de9f
+      size: 224
+    - path: scripts/evaluate.py
+      hash: md5
+      md5: 06096bf82ef13262b3cd2528236ccc0c
+      size: 964
+    - path: src/kidney_classifier/data.py
+      hash: md5
+      md5: ed394dbe7f2583a5c344979a9441f73a
+      size: 1134
+    - path: src/kidney_classifier/eval.py
+      hash: md5
+      md5: 7a50ee32ea3d12da6dfb6fbe8494ceb1
+      size: 1896
+    - path: src/kidney_classifier/model.py
+      hash: md5
+      md5: c250026896e40a97b8e5477c409994ae
+      size: 781
+    params:
+      params.yaml:
+        data.num_classes: 2
+        train.batch_size: 16
+        train.image_size: 224
+    outs:
+    - path: metrics/eval.json
+      hash: md5
+      md5: a987cdb0740dbdb7f61ff94f046bad84
+      size: 60
